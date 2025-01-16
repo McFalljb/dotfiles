@@ -37,6 +37,7 @@
           enable = true;
           brews = [
             "mas"
+            "zoxide"
           ];
           casks = [
             "ghostty"
