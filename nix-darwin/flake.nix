@@ -27,6 +27,11 @@
           pkgs.lazydocker
           pkgs.obsidian
           pkgs.stow
+          pkgs.fzf
+          pkgs.ripgrep
+          pkgs.lua54Packages.luarocks
+          pkgs.lua
+          pkgs.lazygit
         ];
       homebrew = {
           enable = true;
