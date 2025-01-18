@@ -32,6 +32,7 @@
           pkgs.lua54Packages.luarocks
           pkgs.lua
           pkgs.lazygit
+          pkgs.glfw
         ];
       homebrew = {
           enable = true;
