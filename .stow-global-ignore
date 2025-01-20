@@ -15,7 +15,10 @@ _darcs
 \.gitignore
 \.gitmodules
 
+^.*\.sh$    # Shell scripts
+nix-linux
 nix-darwin
+etc
 
 .+~          # emacs backup files
 \#.*\#       # emacs autosave files
