@@ -95,6 +95,7 @@ if command -v pyenv 1>/dev/null 2>&1; then
 fi
 
 export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
+export NIXPKGS_ALLOW_UNFREE=1
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/mcfalljb/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/mcfalljb/Downloads/google-cloud-sdk/path.zsh.inc'; fi

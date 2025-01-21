@@ -1,5 +1,5 @@
 {
-  description = "Example Linux Flake using Home Manager + NixGL on non-NixOS (NVIDIA)";
+  description = "Example Linux Flake using Home Manager + NixGL + pinned binutils";
 
   inputs = {
     # 1. Bring in an up-to-date nixpkgs
@@ -47,9 +47,18 @@
       modules = [
         ({ config, pkgs, ... }: {
           # Set up NixGL configuration
-          nixGL.packages = nixgl.packages.${system};
-          nixGL.defaultWrapper = "nvidia";
-          nixGL.installScripts = [ "nvidia" ];
+          # nixGL.packages = nixgl.packages.${system};
+          # nixGL.defaultWrapper = "nvidia";
+          # nixGL.installScripts = [ "nvidia" ];
+          nixGL.packages = nixgl.packages;
+          nixGL.defaultWrapper = "mesa";
+          nixGL.offloadWrapper = "nvidiaPrime";
+          nixGL.installScripts = [ "mesa" "nvidiaPrime" ];
+
+          programs.mpv = {
+            enable = true;
+            package = config.lib.nixGL.wrap pkgs.mpv;
+          };
 
           home.username = "mcfalljb";
           home.homeDirectory = "/home/mcfalljb";
@@ -57,6 +66,8 @@
 
           # Example of other packages in the user environment
           home.packages = with pkgs; [
+            (config.lib.nixGL.wrapOffload pkgs.freecad)
+            (config.lib.nixGL.wrappers.nvidiaPrime pkgs.xonotic)
             # Wrap GUI applications with NixGL
             (config.lib.nixGL.wrap ghostty.packages.${system}.default)
             # Keep other packages as is
@@ -82,6 +93,9 @@
             zoxide
             home-manager
             zsh
+            gh
+            python314
+            gcc
           ];
 
           programs.zsh.enable = true;
@@ -101,10 +115,72 @@
               auto-optimise-store = true;
               max-jobs = "auto";
               substitute = true;
+              substituters = [
+                "https://cache.nixos.org"
+                "https://nix-community.cachix.org"
+              ];
+              trusted-public-keys = [
+                "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+                "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+              ];
             };
           };
         })
       ];
+    };
+
+    # Development shell with OpenGL support
+    devShells.${system}.default = pkgs.mkShell {
+      packages = with pkgs; [
+        # Development tools
+        pkg-config
+        cmake
+        gcc11
+        binutils
+        gdb
+
+        # GL libraries
+        nixgl.packages.${system}.nixGLNvidia
+        glew
+        glfw
+        freeglut
+        xorg.libX11
+        xorg.libXrandr
+        xorg.libXinerama
+        xorg.libXcursor
+        xorg.libXi
+        xorg.libXext
+        xorg.libXxf86vm
+        xorg.libXfixes
+        libGL
+        libGLU
+      ];
+
+      shellHook = ''
+        # Ensure Nix binaries come first in PATH
+        export PATH="${pkgs.gcc11}/bin:${pkgs.binutils}/bin:$PATH"
+        
+        # Force the compiler and linker paths
+        export CC="${pkgs.gcc11}/bin/gcc"
+        export CXX="${pkgs.gcc11}/bin/g++"
+        export LD="${pkgs.binutils}/bin/ld"
+        
+        # Set up OpenGL environment with nixGL
+        alias glxinfo="nixGLNvidia glxinfo"
+        alias glxgears="nixGLNvidia glxgears"
+        
+        echo "Shell environment:"
+        echo "  CC: $CC"
+        echo "  CXX: $CXX"
+        echo "  LD: $LD"
+        echo "  GCC version: $($CC --version | head -n1)"
+        echo "  DISPLAY: $DISPLAY"
+        
+        # Wrap the program with nixGL
+        if [ -n "$1" ]; then
+          exec nixGLNvidia "$@"
+        fi
+      '';
     };
   };
 }
