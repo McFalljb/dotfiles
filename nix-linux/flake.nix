@@ -47,18 +47,18 @@
       modules = [
         ({ config, pkgs, ... }: {
           # Set up NixGL configuration
-          # nixGL.packages = nixgl.packages.${system};
-          # nixGL.defaultWrapper = "nvidia";
-          # nixGL.installScripts = [ "nvidia" ];
-          nixGL.packages = nixgl.packages;
-          nixGL.defaultWrapper = "mesa";
-          nixGL.offloadWrapper = "nvidiaPrime";
-          nixGL.installScripts = [ "mesa" "nvidiaPrime" ];
+          nixGL.packages = nixgl.packages.${system};
+          nixGL.defaultWrapper = "nvidia";
+          nixGL.installScripts = [ "nvidia" ];
+          # nixGL.packages = nixgl.packages;
+          # nixGL.defaultWrapper = "mesa";
+          # nixGL.offloadWrapper = "nvidiaPrime";
+          # nixGL.installScripts = [ "mesa" "nvidiaPrime" ];
 
-          programs.mpv = {
-            enable = true;
-            package = config.lib.nixGL.wrap pkgs.mpv;
-          };
+          # programs.mpv = {
+          #   enable = true;
+          #   package = config.lib.nixGL.wrap pkgs.mpv;
+          # };
 
           home.username = "mcfalljb";
           home.homeDirectory = "/home/mcfalljb";
@@ -66,8 +66,6 @@
 
           # Example of other packages in the user environment
           home.packages = with pkgs; [
-            (config.lib.nixGL.wrapOffload pkgs.freecad)
-            (config.lib.nixGL.wrappers.nvidiaPrime pkgs.xonotic)
             # Wrap GUI applications with NixGL
             (config.lib.nixGL.wrap ghostty.packages.${system}.default)
             # Keep other packages as is
@@ -96,6 +94,10 @@
             gh
             python314
             gcc
+            imagemagick
+            gimp
+            aseprite
+            blender
           ];
 
           programs.zsh.enable = true;
