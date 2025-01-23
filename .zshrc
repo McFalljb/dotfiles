@@ -52,9 +52,13 @@ zinit cdreplay -q
 
 # Keybindings
 bindkey -e
-bindkey '^[[A' history-search-backward
-bindkey '^[[B' history-search-forward
+# bindkey '^[[1;5A' history-search-backward
+# bindkey '^[[1;5B' history-search-forward
+bindkey '^[[1;5A' history-substring-search-up
+bindkey '^[[1;5B' history-substring-search-down
 bindkey '^[w' kill-region
+bindkey "^[[1;5D" backward-word
+bindkey "^[[1;5C" forward-word
 
 # History
 HISTSIZE=5000
