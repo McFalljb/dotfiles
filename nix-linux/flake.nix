@@ -2,21 +2,17 @@
   description = "Example Linux Flake using Home Manager + NixGL + pinned binutils";
 
   inputs = {
-    # 1. Bring in an up-to-date nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    # 2. Bring in Home Manager (following the same nixpkgs)
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Optional: Additional flakes; e.g. ghostty
     ghostty = {
       url = "github:ghostty-org/ghostty";
     };
 
-    # 3. Bring in the nixGL flake (for non-NixOS GPU/OpenGL)
     nixgl = {
       url = "github:guibou/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -27,12 +23,10 @@
   let
     system = "x86_64-linux";
 
-    # Inject the nixGL overlay so pkgs includes pkgs.nixGLNvidia, etc.
     pkgs = import nixpkgs {
       inherit system;
       config = {
         allowUnfree = true;
-        nvidia.acceptLicense = true;
       };
       overlays = [
         nixgl.overlay
@@ -43,32 +37,19 @@
     homeConfigurations.mcfalljb = home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
 
-      # The modules array is where we configure the user's Home Manager options
       modules = [
         ({ config, pkgs, ... }: {
-          # Set up NixGL configuration
+          # Simplified NixGL configuration to use system drivers
           nixGL.packages = nixgl.packages.${system};
-          nixGL.defaultWrapper = "nvidia";
-          nixGL.installScripts = [ "nvidia" ];
-          # nixGL.packages = nixgl.packages;
-          # nixGL.defaultWrapper = "mesa";
-          # nixGL.offloadWrapper = "nvidiaPrime";
-          # nixGL.installScripts = [ "mesa" "nvidiaPrime" ];
-
-          # programs.mpv = {
-          #   enable = true;
-          #   package = config.lib.nixGL.wrap pkgs.mpv;
-          # };
+          # nixGL.defaultWrapper = "nvidia"; # Use system NVIDIA drivers leave commented out
+          nixGL.installScripts = [ ];
 
           home.username = "mcfalljb";
           home.homeDirectory = "/home/mcfalljb";
           home.stateVersion = "23.11";
 
-          # Example of other packages in the user environment
           home.packages = with pkgs; [
-            # Wrap GUI applications with NixGL
             (config.lib.nixGL.wrap ghostty.packages.${system}.default)
-            # Keep other packages as is
             vim
             neovim
             packer
@@ -104,7 +85,6 @@
           home.file.".zshrc".enable = false;
           home.file.".bashrc".enable = false;
 
-          # Let the user environment have the new Nix CLI features
           nix = {
             package = pkgs.nix;
             settings = {
@@ -134,15 +114,11 @@
     # Development shell with OpenGL support
     devShells.${system}.default = pkgs.mkShell {
       packages = with pkgs; [
-        # Development tools
         pkg-config
         cmake
         gcc11
         binutils
         gdb
-
-        # GL libraries
-        nixgl.packages.${system}.nixGLNvidia
         glew
         glfw
         freeglut
