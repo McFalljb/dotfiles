@@ -54,8 +54,11 @@ zinit cdreplay -q
 bindkey -e
 # bindkey '^[[1;5A' history-search-backward
 # bindkey '^[[1;5B' history-search-forward
-bindkey '^[[1;5A' history-substring-search-up
-bindkey '^[[1;5B' history-substring-search-down
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+# macOS specific bindings
+bindkey '^[OA' history-substring-search-up
+bindkey '^[OB' history-substring-search-down
 bindkey '^[w' kill-region
 bindkey "^[[1;5D" backward-word
 bindkey "^[[1;5C" forward-word
