@@ -79,6 +79,18 @@
             gimp
             aseprite
             blender
+            emscripten
+            SDL2
+            SDL2_mixer
+            SDL2_ttf
+            SDL2_image
+            SDL2_gfx
+            SDL2_net
+            pkg-config
+            cmake
+            ninja
+            valgrind
+            gdb
           ];
 
           programs.zsh.enable = true;
@@ -116,7 +128,7 @@
       packages = with pkgs; [
         pkg-config
         cmake
-        gcc11
+        gcc
         binutils
         gdb
         glew
@@ -132,15 +144,24 @@
         xorg.libXfixes
         libGL
         libGLU
+        SDL2
+        SDL2_ttf
+        SDL2_mixer
+        SDL2_image
+        SDL2_gfx
+        SDL2_net
+        libjack2
+        alsa-lib
+        pulseaudio
       ];
 
       shellHook = ''
         # Ensure Nix binaries come first in PATH
-        export PATH="${pkgs.gcc11}/bin:${pkgs.binutils}/bin:$PATH"
+        export PATH="${pkgs.gcc}/bin:${pkgs.binutils}/bin:$PATH"
         
         # Force the compiler and linker paths
-        export CC="${pkgs.gcc11}/bin/gcc"
-        export CXX="${pkgs.gcc11}/bin/g++"
+        export CC="${pkgs.gcc}/bin/gcc"
+        export CXX="${pkgs.gcc}/bin/g++"
         export LD="${pkgs.binutils}/bin/ld"
         
         # Set up OpenGL environment with nixGL
