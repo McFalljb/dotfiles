@@ -91,6 +91,7 @@
             ninja
             valgrind
             gdb
+            flameshot
           ];
 
           programs.zsh.enable = true;

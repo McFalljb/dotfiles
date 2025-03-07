@@ -33,6 +33,8 @@
           pkgs.lua
           pkgs.lazygit
           pkgs.glfw
+          pkgs.steam
+          pkgs.zellij
         ];
       homebrew = {
           enable = true;
@@ -69,7 +71,7 @@
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#mcfalljb
     darwinConfigurations."mcfalljb" = nix-darwin.lib.darwinSystem {
-      system = "aarch64-darwin";  # Added this line
+      system = "aarch64-darwin";
       modules = [
       configuration
       nix-homebrew.darwinModules.nix-homebrew
@@ -83,6 +85,6 @@
       ];
 
     };
-    darwinPackages = self.darwinConfigurations."mcfalljb".pkgs;  # Fixed configuration(s)
+    darwinPackages = self.darwinConfigurations."mcfalljb".pkgs;
   };
 }
