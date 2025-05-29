@@ -90,6 +90,8 @@ alias vi='nvim'
 alias c='clear'
 alias ll="ls -l --color"
 alias lla="ls -la --color"
+alias k="kubectl"
+alias kc="kubectx"
 
 # Shell integrations
 eval "$(fzf --zsh)"
@@ -104,7 +106,7 @@ fi
 export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
 export NIXPKGS_ALLOW_UNFREE=1
 export NIXPKGS_ALLOW_INSECURE=1
-export NIXPKGS_ALLOW_BROKEN=1
+export TERM=xterm-256color
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/mcfalljb/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/mcfalljb/Downloads/google-cloud-sdk/path.zsh.inc'; fi

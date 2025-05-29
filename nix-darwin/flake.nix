@@ -25,7 +25,6 @@
           pkgs.zig
           pkgs.tmux
           pkgs.lazydocker
-          pkgs.obsidian
           pkgs.stow
           pkgs.fzf
           pkgs.ripgrep
@@ -33,37 +32,45 @@
           pkgs.lua
           pkgs.lazygit
           pkgs.glfw
-          pkgs.steam
+          pkgs.pkg-config
           pkgs.zellij
+          pkgs.cmake
+          pkgs.clang
+          pkgs.devbox
+          pkgs.kind
         ];
       homebrew = {
           enable = true;
           brews = [
             "mas"
             "zoxide"
+            "sdl2"
+            "sdl2_mixer"
+            "sdl2_ttf"
+            "sdl2_image"
+            "sdl2_gfx"
+            "sdl2_net"
+            "btop"
           ];
           casks = [
             "ghostty"
+            "obsidian"
+            "blender"
           ];
           onActivation.cleanup = "zap";
           onActivation.autoUpdate = true;
           onActivation.upgrade = true;
       };
-      services.nix-daemon.enable = true;
+      # services.nix-daemon.enable = true;
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
-      # Enable alternative shell support in nix-darwin.
       programs.zsh.enable = true;
-      # Set Git commit hash for darwin-version.
       system.configurationRevision = self.rev or self.dirtyRev or null;
-      # Used for backwards compatibility, please read the changelog before changing.
-      # $ darwin-rebuild changelog
       system.stateVersion = 5;
-      # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
       nixpkgs.config.allowUnfree = true;
       nix.settings = {
-        trusted-users = [ "@admin" "mcfalljb" ];  # Replace mcfalljb with your username if different
+        trusted-users = [ "@admin" "mcfalljb" ];
       };
     };
   in

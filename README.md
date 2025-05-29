@@ -1,23 +1,43 @@
 # Dotfiles
 
-## Build linux
-
-nix shell nixpkgs#home-manager
-NIXPKGS_ALLOW_UNFREE=1 nix run home-manager/release-23.11 -- switch --impure --flake ~/dotfiles/nix-linux#mcfalljb
-
-nix flake update
-
-To run programs requring opengl
-nix develop --impure /home/mcfalljb/dotfiles/nix-linux --command bash -c './build.sh watch'
-
-### Regs
-
-home-manager
-nix package manager
-
 ## Build Macos
 
-### Regs
+### Initial Setup
+```bash
+# Install nix-darwin for the first time
+nix run nix-darwin -- switch --flake ~/dotfiles/nix-darwin
+```
 
-nix-darwin
-nix package manager
+### Regular Operations
+```bash
+# Update flake inputs
+nix flake update
+
+# Apply configuration changes
+darwin-rebuild switch --flake ~/dotfiles/nix-darwin
+
+# Build without applying (dry run)
+darwin-rebuild build --flake ~/dotfiles/nix-darwin
+
+# Check what would change
+darwin-rebuild build --flake ~/dotfiles/nix-darwin --show-trace
+```
+
+### Debugging & Maintenance
+```bash
+# Rollback to previous generation
+darwin-rebuild rollback
+
+# List system generations
+nix-env --list-generations --profile /nix/var/nix/profiles/system
+
+# Garbage collect old generations
+sudo nix-collect-garbage -d
+
+# Check homebrew status (managed by nix-darwin)
+brew list
+brew outdated
+
+# Verify nix-darwin service
+sudo launchctl list | grep nix-daemon
+```
