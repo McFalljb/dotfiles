@@ -8,6 +8,8 @@ fi
 if [[ -f "/opt/homebrew/bin/brew" ]] then
   # If you're using macOS, you'll want this enabled
   eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 # Set the directory we want to store zinit and plugins
@@ -85,8 +87,7 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 # Aliases
 alias ls='ls --color'
-alias vim='nvim'
-alias vi='nvim'
+alias vi='vim'
 alias c='clear'
 alias ll="ls -l --color"
 alias lla="ls -la --color"
@@ -113,3 +114,6 @@ if [ -f '/Users/mcfalljb/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Us
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/mcfalljb/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/mcfalljb/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$(go env GOPATH)/bin

@@ -18,7 +18,7 @@
           pkgs.neovim
           pkgs.packer
           pkgs.terraform
-          pkgs.nodejs_23
+          pkgs.nodejs_24
           pkgs.docker
           pkgs.jq
           pkgs.go
@@ -51,6 +51,10 @@
             "sdl2_gfx"
             "sdl2_net"
             "btop"
+            "opencode"
+          ];
+          taps = [
+            "sst/tap"
           ];
           casks = [
             "ghostty"
@@ -67,6 +71,7 @@
       programs.zsh.enable = true;
       system.configurationRevision = self.rev or self.dirtyRev or null;
       system.stateVersion = 5;
+      system.primaryUser = "mcfalljb";
       nixpkgs.hostPlatform = "aarch64-darwin";
       nixpkgs.config.allowUnfree = true;
       nix.settings = {
@@ -87,6 +92,7 @@
             enable = true;
             enableRosetta = true;
             user = "mcfalljb";
+            autoMigrate = true;
           };
         }
       ];
